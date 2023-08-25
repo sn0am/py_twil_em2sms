@@ -27,7 +27,7 @@ class CustomSMTPServer(smtpd.SMTPServer):
             # Parse Email
             data_parse = BytesParser()
             email_data = data_parse.parsebytes(data)
-            email_subject = fix_text(str(email_data.get('Subject')))
+            email_subject = fix_text(email_data.get('Subject'))
             print(f"Data type received is: {email_data.get_content_type()}")
             for part in email_data.walk():
                 if part.get_content_type() != 'text/plain':
