@@ -1,0 +1,3 @@
+shutup
+python-dotenv
+twilio
