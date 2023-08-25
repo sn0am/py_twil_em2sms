@@ -10,11 +10,8 @@ Instructions:
 
 -build command:
 
-docker build . -t user_name/image_name
-
--then push image to docker
+docker build . -t image_name
 
 -run container command:
 
-docker pull user_name/image_name
-sudo docker run -d -p 25:25 --env-file /path/to/.env --restart unless-stopped user_name/image_name
+sudo docker run -d -p 25:25 --restart unless-stopped image_name
