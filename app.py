@@ -2,7 +2,6 @@ import smtpd
 import asyncore
 from email.parser import BytesParser
 from twilio.rest import Client
-import time
 from dotenv import load_dotenv
 import os
 import shutup
@@ -33,12 +32,8 @@ class CustomSMTPServer(smtpd.SMTPServer):
                 if part.get_content_type() != 'text/plain':
                     print(f"Only forwarding 'text/plain' portion of the email.")
                 if part.get_content_type() == 'text/plain':
-                    raw_body = part.get_payload(decode=True)
-                    email_body = str(raw_body)
-                    email_body = email_body[2:-1].replace("\\n", "\n")
-                    email_body = email_body.replace("\\r", "")
+                    email_body = str(part.get_payload(decode=True))[2:-1].replace("\\n", "\n").replace("\\r", "")
 
-            time.sleep(5)
             # Initialize Twilio client.
             client = Client(twil_sid, twil_auth)
             # Send SMS.
@@ -50,7 +45,6 @@ class CustomSMTPServer(smtpd.SMTPServer):
             print(f"{email_subject}:\n\n{email_body}'")
             print("----------------")
         except:
-            print("pass")
             # Print if error occurs.
             print(f"'Error occurred while sending message to: {number}")
             print(f"{email_subject}:\n\n{email_body}'")
@@ -61,4 +55,3 @@ server = CustomSMTPServer(('0.0.0.0', 25), None)
 print("email2sms is listening on port 25")
 
 asyncore.loop()
-
