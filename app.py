@@ -24,15 +24,15 @@ class CustomSMTPServer(smtpd.SMTPServer):
             # Extract phone number from "To" header.
             number = rcpttos[0].split('@')[0]
             # Parse Email
-            parse = BytesParser()
-            email_data = parse.parsebytes(data)
-            email_subject = email_data.get('Subject')
+            data_parse = BytesParser()
+            email_data = data_parse.parsebytes(data)
+            email_subject = str(email_data.get('Subject')).format()
             print(f"Data type received is: {email_data.get_content_type()}")
             for part in email_data.walk():
                 if part.get_content_type() != 'text/plain':
                     print(f"Only forwarding 'text/plain' portion of the email.")
                 if part.get_content_type() == 'text/plain':
-                    email_body = str(part.get_payload(decode=True))[2:-1].replace("\\n", "\n").replace("\\r", "")
+                    email_body = str(part.get_payload(decode=True))[2:-1].replace("\\n", "\n").replace("\\r", "").format()
 
             # Initialize Twilio client.
             client = Client(twil_sid, twil_auth)
