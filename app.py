@@ -34,7 +34,7 @@ class CustomSMTPServer(smtpd.SMTPServer):
                     print(f"Only forwarding 'text/plain' portion of the email.")
                 if part.get_content_type() == 'text/plain':
                     email_body = fix_text(str(part.get_payload(decode=True))[2:-1]
-                                              .replace("\\n", "\n").replace("\\r", ""))
+                                          .replace("\\n", "\n").replace("\\r", ""))
 
             # Initialize Twilio client.
             client = Client(twil_sid, twil_auth)
