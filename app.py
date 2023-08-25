@@ -3,6 +3,7 @@ import asyncore
 from email.parser import BytesParser
 from twilio.rest import Client
 from dotenv import load_dotenv
+from ftfy import fix_text
 import os
 import shutup
 
@@ -26,14 +27,14 @@ class CustomSMTPServer(smtpd.SMTPServer):
             # Parse Email
             data_parse = BytesParser()
             email_data = data_parse.parsebytes(data)
-            email_subject = str(email_data.get('Subject')).format()
+            email_subject = fix_text(str(email_data.get('Subject')))
             print(f"Data type received is: {email_data.get_content_type()}")
             for part in email_data.walk():
                 if part.get_content_type() != 'text/plain':
                     print(f"Only forwarding 'text/plain' portion of the email.")
                 if part.get_content_type() == 'text/plain':
-                    email_body = str(part.get_payload(decode=True))[2:-1]
-                                     .replace("\\n", "\n").replace("\\r", "").format()
+                    email_body = fix_text(str(part.get_payload(decode=True))[2:-1]
+                                              .replace("\\n", "\n").replace("\\r", ""))
 
             # Initialize Twilio client.
             client = Client(twil_sid, twil_auth)
