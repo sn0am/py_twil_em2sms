@@ -15,4 +15,4 @@ docker build . -t image_name
 
 -run container command:
 
-sudo docker run -d -p 25:25 --restart unless-stopped image_name
+sudo docker run -d -p 25:25 -p 8090:8090 --restart unless-stopped image_name
