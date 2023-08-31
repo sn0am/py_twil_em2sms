@@ -1,13 +1,29 @@
 import smtpd
 import asyncore
+import threading
 from email.parser import BytesParser
 from twilio.rest import Client
 from dotenv import load_dotenv
 from ftfy import fix_text
 import os
 import shutup
-
+from flask import Flask, request
 shutup.please()
+
+# --- web status page
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def status():
+    if request.method == "GET":
+        return "OK", 200
+    return "?"
+
+
+# --- email2sms application
+
 # Load ENV file.
 folder = os.getcwd()
 load_dotenv(f'{folder}/.env')
@@ -56,4 +72,5 @@ class CustomSMTPServer(smtpd.SMTPServer):
 server = CustomSMTPServer(('0.0.0.0', 25), None)
 print("email2sms is listening on port 25")
 
-asyncore.loop()
+threading.Thread(target=lambda: app.run(host="0.0.0.0", port=8090, debug=True, use_reloader=False)).start()
+threading.Thread(target=asyncore.loop()).start()
