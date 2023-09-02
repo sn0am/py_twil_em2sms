@@ -1,7 +1,7 @@
 Info:
 -----
 email format needs to be:
-XXXXXXXXXX@email.com
+XXXXXXXXXX@domain.com
 where x is the phone number without country code.
 
 fill env.example with the proper variables before running the docker build command, the example file will be copied into the container working directory as the working .env
